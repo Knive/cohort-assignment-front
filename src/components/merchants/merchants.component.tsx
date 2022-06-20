@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Merchant } from "./merchant.types";
 import MerchantsCardsLoading from "./merchants-loading.component";
 import MerchantCard from "./merchant-card.components";
@@ -9,23 +9,23 @@ export default function MerchantsContainer() {
 	const [merchants, setMerchants] = useState<Array<Merchant>>([])
 	const [error, setError] = useState<boolean>(false)
 
-	useEffect(() => {
-
-		async function getMerchantsList() {
+	/**
+	 * Fetch merchants list
+	 */
+	const getMerchantsList = useCallback(async () => {
+		try {
 			const response = await fetch('http://[::1]:3000/merchants')
-			return await response.json()
+			const merchantsList = await response.json()
+			setMerchants(merchantsList)
+			setLoading(false)
+		} catch (err) {
+			setError(true)
+			console.error(err)
 		}
+	}, [])
 
+	useEffect(() => {
 		getMerchantsList()
-			.then(merchantsList => {
-				setLoading(false)
-				setMerchants(merchantsList)
-			})
-			.catch((err) => {
-				setError(true)
-				console.error(err)
-			})
-
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
