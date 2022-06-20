@@ -48,8 +48,14 @@ export default function MerchantCard({ merchant }: MerchantCardProps) {
 		if (!loading) {
 			if (error)
 				return 'Campaigns could not be loaded'
-			else
-				return `${campaigns.length === 0 ? 'No' : campaigns.length} Campaigns Available`
+
+			if (campaigns.length === 0)
+				return 'No Campaigns Available'
+
+			if (campaigns.length > 1000)
+				return 'More than a thousand campaigns available'
+
+			return `${campaigns.length} Campaigns Available`
 		}
 
 		return null
