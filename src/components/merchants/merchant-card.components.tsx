@@ -45,16 +45,22 @@ export default function MerchantCard({ merchant }: MerchantCardProps) {
 	}, [loading])
 
 	const CampaignsDisplay = useMemo(() => {
+		// Not loaded yet
 		if (!loading) {
+
+			// Error with fetch request
 			if (error)
 				return 'Campaigns could not be loaded'
 
+			// Campaigns list empty
 			if (campaigns.length === 0)
 				return 'No Campaigns Available'
 
+			// More than a thousand
 			if (campaigns.length > 1000)
 				return 'More than a thousand campaigns available'
 
+			// Basic length
 			return `${campaigns.length} Campaigns Available`
 		}
 
@@ -63,8 +69,16 @@ export default function MerchantCard({ merchant }: MerchantCardProps) {
 
 	return (
 		<div className="w-full rounded-3xl overflow-hidden shadow-lg cursor-pointer bg-white hover:bg-gray-50">
-			<img className="w-full h-60 object-cover" src={merchant.bannerUrl} alt={merchant.name} />
-			<img className="w-20 h-20 rounded-full ml-8 -mt-12 relative border-4 border-solid border-white object-cover" src={merchant.logoUrl} alt={merchant.name} />
+			{
+				merchant.bannerUrl !== ''
+					? <img className="w-full h-60 object-cover" src={merchant.bannerUrl} alt={merchant.name} />
+					: <div className="w-full h-60 bg-slate-300"></div>
+			}
+			{
+				merchant.logoUrl !== ''
+					? <img className="w-20 h-20 rounded-full ml-8 -mt-12 relative border-4 border-solid border-white object-cover" src={merchant.logoUrl} alt={merchant.name} />
+					: <div className="w-20 h-20 rounded-full ml-8 -mt-12 relative border-4 border-solid border-white bg-white"></div>
+			}
 			<div className="px-6 py-4">
 				<div className="font-bold text-xl mb-2">{merchant.name}</div>
 				<LoadingCard />
